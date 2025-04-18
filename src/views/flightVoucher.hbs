@@ -1,0 +1,476 @@
+<div style="margin:40px; font-family: Helvetica, sans-serif; line-height: 25px; color: #333">
+  <style>
+    .container {
+      font-size: 14px;
+    }
+
+    .d-flex {
+      display: flex,
+    }
+
+    .flex-column {
+      flex-direction: column
+    }
+
+    .table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .header {
+      font-size: 18px;
+      font-weight: bold;
+      color: #5badce;
+    }
+
+    .header_main {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #d8d8d8;
+      padding-bottom: 10px;
+      margin: -40px 0 40px;
+    }
+
+    #logo_container {
+      width: 160px;
+      height: 50px;
+    }
+
+    #logo {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    .table {
+      font-size: 14px;
+    }
+
+    .table tr th {
+      text-align: left;
+    }
+
+    .voucher_header_content {}
+
+    .journey_details {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .journey_details .airline {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .departure_details {
+      font-size: 14px;
+    }
+
+    .arr_dep_seprator {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .separator {
+      width: :50px;
+      height: 2px;
+      background-color: #222;
+    }
+
+    .arrival_details {
+      font-size: 14px;
+    }
+
+    .arrival_details .date,
+    .departure_details .date {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .passenger_details {
+      font-size: 14px;
+    }
+
+    .flight_inclusion {}
+
+    .baggage_info {}
+
+    .fare_details {
+      font-size: 14px;
+    }
+
+    .cancellation_charges {
+      font-size: 14px;
+    }
+
+    .terms_and_conditions {
+      font-size: 12px;
+    }
+
+    .contact_information {}
+  </style>
+  <div class="container">
+    <div class="header_main">
+      <div id="logo_container">
+        <img id="logo" src="{{logoUrl}}" alt="logo">
+      </div>
+      <div>
+        <div class="booking_status">
+          Booking Confirm
+        </div>
+        <div>
+          {{bookingDate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="voucher_header_content">
+      <p>
+        Your flight ticket for {{departureCode}}-{{arrivalCode}} is confirm. Your ticket is attached along with the
+        email.
+      </p>
+      <p>
+        Your Booking ID is {{bookingId}} . Please use it for any further communication with us.
+      </p>
+    </div>
+
+    {{#each flightSegments}}
+    <div class="journey_details">
+      <div class="airline">
+        {{this.airlineName}}
+      </div>
+      <div class="d-flex flex-column">
+        <div>
+          {{this.airlineName}}
+        </div>
+        <div style="font-weight:bold">
+          {{this.airlineId}}-{{this.flightNo}}
+        </div>
+      </div>
+      <div class="departure_details">
+        <div class="d-flex flex-column">
+          <div>
+            {{this.departure.airportCode}} {{this.departure.time}}
+          </div>
+          <div class="date">
+            {{this.departure.date}}
+          </div>
+          {{!-- <div>
+            terminal 2
+          </div> --}}
+        </div>
+      </div>
+      <div class="arr_dep_seprator">
+        <div class="separator">
+
+        </div>
+        <div class="journey_duration">
+          {{this.duration}}
+        </div>
+      </div>
+      <div class="arrival_details">
+        <div class="d-flex flex-column">
+          <div>
+            {{this.arrival.airportCode}} {{this.arrival.time}}
+          </div>
+          <div class="date">
+            {{this.arrival.date}}
+          </div>
+          {{!-- <div>
+            terminal 1
+          </div> --}}
+        </div>
+      </div>
+    </div>
+
+    {{/each}}
+
+    <div class="passenger_details">
+      <div class="header">
+        Passengers - 2 Adults
+      </div>
+      <div class="body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Passenger</th>
+              <th>Status</th>
+              <th>Sector</th>
+              <th>PNR</th>
+              <th>Ticket Number</th>
+              <th>Seat No</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each passengers}}
+            <tr>
+              <td>{{this.firstName}} {{this.lastName}}</td>
+              <td>Confirm</td>
+              <td>--</td>
+              <td>{{../PNR}}</td>
+              <td>{{this.ticketDocNbr}}</td>
+              <td>-</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flight_inclusion">
+      <div class="header">
+        Flight Inclusion
+      </div>
+      <div class="body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Passenger</th>
+              <th>Sector</th>
+              <th>Flight Insurance Status</th>
+              <th>Meal Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each passengers}}
+            <tr>
+              <td>{{this.firstName}} {{this.lastName}}</td>
+              <td>--</td>
+              <td>Not Confirmed</td>
+              <td>Not Confirmed</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {{!-- <div class="baggage_info">
+      <div class="header">
+        Baggage Info
+      </div>
+      <div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Airline</th>
+              <th>Sector</th>
+              <th>Baggage (Check in)</th>
+              <th>Baggage (Cabin)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{airlineId}}</td>
+              <td>{{departureCode}}-{{arrivalCode}}</td>
+              <td>15KG</td>
+              <td>7KG</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> --}}
+
+    <div class="fare_details">
+      <div class="header">
+        Fare Details
+      </div>
+      <div class="body">
+        <table class="table">
+          <thead>
+            <tr style="font-weight: bold;">
+              <td>Detail</td>
+              <td>Amount (INR)</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total Basic Fare : </td>
+              <td>Rs. {{baseAmount}}</td>
+            </tr>
+            <tr>
+              <td>Other Charges : </td>
+              <td>Rs. {{totalTaxes}}</td>
+            </tr>
+            <tr>
+              <td>Discount : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <td>Insurance Fee : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <td>Meal Amount : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <td>Bagg. Amount : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <td>Seat. Amount : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <td>Reschedule Charges : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <td>Cancellation Ins Charges : </td>
+              <td>Rs. 0.00</td>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <th>Rs. {{totalAmount}}</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="cancellation_charges">
+      <div class="header">
+        Cancellation Charges
+      </div>
+      <strong>TripBazaar Fee:</strong> Rs. 250 per pax per sector.
+
+      <strong>Airline Fee:</strong>
+      <div class="body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Airline</th>
+              <th>Cancellation Time</th>
+              <th>Charges</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>-</td>
+              <td>Before 6 hours - 72 hours of departure</td>
+              <td>- (per pax per sector)</td>
+            </tr>
+            <tr>
+              <td>-</td>
+              <td>Before 72 hours - 8760 hours of departure</td>
+              <td>- (per pax per sector)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="terms_and_conditions">
+      <div class="header">
+        Terms and Conditions
+      </div>
+      <ul>
+        <li>
+          All passengers, including children and infants, have to present their valid ID proof at the time of check­in.
+        </li>
+        <li>
+          We recommend you checkin at least 3 hours prior to departure of your domestic flight and 4 hours prior to your
+          international flight
+        </li>
+        <li>
+
+          Carriage and other facilities provided by the carrier are subject to their Terms and Condition. We are not
+          liable
+          for missing any facility of the carrier.</li>
+        <li>
+
+          To cancel tickets in less than 6 hours prior to departure, please contact the airlines directly. We are not at
+          all
+          responsible for any losses on receiving the request in such
+          cases.</li>
+        <li>
+
+          Recheck your baggage with your respective airline before travelling for hassle­free travel experience.</li>
+        <li>
+
+          Due to the security reasons and Government regulations, passengers flying on destination like Jammu and
+          Srinagar
+          are not allowed to carry any Hand Baggage.</li>
+        <li>
+
+          Free baggage allowance: 15KG checked baggage and 7 KG cabin baggage­OutBound, Baggage more than specified
+          units
+          is
+          subject to a charge to be paid at the airport
+          during check­in. (Baggage allowance differ for infants)</li>
+        <li>
+
+          Partial cancellation is not allowed for Round­trip fares.</li>
+        <li>
+
+          Partial cancellation is not allowed for tickets booked under Friends & Family fares.</li>
+        <li>
+
+          The No Show refund* should be collected within 90 days from date of departure.</li>
+        <li>
+
+          Group Booking Rules will be applicable if passengers are 9 or more in numbers.</li>
+        <li>
+
+          Company is not responsible for any delay or cancellation of flights from airline's end.</li>
+        <li>
+
+          Kindly contact the airline at least 24 hrs before to reconfirm your flight details giving reference of Airline
+          PNR
+          Number.</li>
+        <li>
+
+          All reservations done through our website are as per the terms and conditions of the concerned airlines. Any
+          modification, cancellation and refund of the airline tickets shallAll reservations done through our website
+          are
+          as
+          per the terms and conditions of the concerned airlines. Any modification, cancellation and refund of the
+          airline
+          tickets shall
+          be strictly as per the policy of the concerned airlines and we deny all liability in connection thereof.</li>
+        <li>
+
+          Unaccompanied Child: Children below the age of 12 will not be accepted for carriage unless they are
+          accompanied
+          by
+          a person of at least 18 years of age. Such child/children
+          must be seated next to the accompanying adult. The accompanying adult is solely responsible for the well­being
+          of
+          the child/children traveling together with him/her. This also
+          includes ensuring that seats are booked to ensure child/children and an accompanying adult are seated
+          together.
+        </li>
+        <li>
+
+          All time indicated are the local times (in 24 hrs. format) at the relevant airport.</li>
+        <li>
+
+          Cancellation and date change fees are applicable before departure and per passenger basis. In case of
+          amendment,
+          along with the airline and EMT fees, you will also have to
+          pay fare difference, if any.</li>
+        <li>
+
+          Please reference the Airline PNR Number when communicating with the airline regarding this booking.</li>
+        <li>
+
+          Some airports have multiple terminals catering to domestic/international flights, please check the
+          departure/arrival terminal of your flight with the airlines before reaching
+          airport.</li>
+
+      </ul>
+    </div>
+
+    <div class="contact_information">
+      <h4>Contact Information</h4>
+      Delonix Travel Services
+      dehradun (248001)
+    </div>
+
+  </div>
+</div>

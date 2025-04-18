@@ -1,0 +1,1116 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "b2capi",
+    "description": "defaultDescription",
+    "version": "0.2"
+  },
+  "servers": [{
+      "url": "https://b2cqa.delonixtravel.in"
+    },
+    {
+      "url": "http://127.0.0.1:3334"
+    }
+  ],
+  "paths": {
+    "/api/hotels/transactions": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"user\":{\"_id\":\"5d6b5c3fea39a35d9a97e179\"}}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/hotels/prebook": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_1"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"booking_policy_id\":\"ccf7493f-d56d-b118-fca1-261582894133\",\"search\":{\"check_out_date\":\"2020-03-20\",\"child_count\":0,\"room_count\":1,\"source_market\":\"IN\",\"hotel_id\":\"kLxE\",\"currency\":\"INR\",\"locale\":\"en-US\",\"adult_count\":1,\"check_in_date\":\"2020-03-19\"},\"transaction_id\":\"56aa06d3b9ff43219c49561e31f1a0ec\",\"contactDetail\":{\"name\":\"Ankit\",\"last_name\":\"Phondani\",\"mobile\":\"9999999999\",\"email\":\"ankit.phondani@delonixtravel.com\"},\"coupon\":{\"name\":\"\",\"value\":0,\"type\":\"\"},\"gstDetail\":{\"gstnumber\":\"\",\"name\":\"\",\"email\":\"\",\"address\":\"\",\"city\":\"\",\"pincode\":\"\",\"state\":\"\",\"mobile\":\"\"}}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotels/process-payment/5e3073f56314ae466c457bb6": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector"
+          }
+        }
+      }
+    },
+    "/api/hotels/packages": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_2"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"checkindate\":\"2020-03-19\",\"checkoutdate\":\"2020-03-20\",\"hotelId\":\"5e590adefe42b31b814045bd\",\"details\":[{\"room\":\"1\",\"adult_count\":1,\"child_count\":\"0\",\"children\":[]}],\"transaction_identifier\":\"56aa06d3b9ff43219c49561e31f1a0ec\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotels/suggest": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_2"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"query\":\"singapore\",\"page\":\"1\",\"perPage\":\"20\",\"currentItemsCount\":\"0\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotels/invoice": {
+      "get": {
+        "description": "This request need bearer token authentication",
+        "parameters": [{
+          "name": "transactionid",
+          "in": "query",
+          "required": false,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "5e3073f56314ae466c457bb6"
+        }],
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/hotels/cancel": {
+      "post": {
+        "description": "This request need bearer token authentication",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_3"
+              },
+              "examples": {
+                "0": {
+                  "value": "\n{\"user\":{\"_id\":\"5d6b5c3fea39a35d9a97e179\"},\"transactionId\":\"5e5952c126a6510582cf5d65\"}\n"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/hotels/bookingpolicy": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_4"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"hotelId\":\"5e590adefe42b31b814045bd\",\"bookingKey\":\"9943e2e5\",\"search\":{\"check_out_date\":\"2020-03-20\",\"child_count\":0,\"room_count\":1,\"source_market\":\"IN\",\"hotel_id\":\"kLxE\",\"currency\":\"INR\",\"locale\":\"en-US\",\"adult_count\":1,\"check_in_date\":\"2020-03-19\"},\"transaction_id\":\"56aa06d3b9ff43219c49561e31f1a0ec\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotels/search": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_5"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"perPage\":15,\"checkindate\":\"2020-03-19\",\"checkoutdate\":\"2020-03-20\",\"area\":{\"id\":\"kLxE\",\"name\":\"Pan Pacific Orchard, 10 Claymore Road, Singapore\",\"type\":\"hotel\"},\"details\":[{\"room\":\"1\",\"adult_count\":1,\"child_count\":\"0\",\"children\":[]}],\"filters\":{}}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotels/voucher": {
+      "get": {
+        "description": "This request need bearer token authentication",
+        "parameters": [{
+          "name": "transactionid",
+          "in": "query",
+          "required": false,
+          "style": "form",
+          "explode": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "5e3073f56314ae466c457bb6"
+        }],
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_6"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"name\":\"John\",\"last_name\":\"Doe\",\"email\":\"johndoe@gmail.com\",\"mobile\":9999999999,\"password\":\"johndoe@123\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "422": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/site/holidaypackage": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/password-reset": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_7"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"userId\":\"5d6b5c3fea39a35d9a97e179\",\"password\":\"12345678\",\"password_reset_token\":\"YvuNKeTFWv4jTwBB7IlVTpMwN\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_8"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"mobile\":9999999999,\"password\":\"Delonix1#\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/site/allspacialoffer": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/site/popularhotel": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/site/allbanner": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "description": "This request need bearer token authentication",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_9"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"refreshToken\":\"Urf6OPiBNJEyuY8M9vCVNZBYRH0xUCDPosBglwmLxaHfr3J7m2BX6vWRPc5jxySK9x1RqWvekyAqxNlR6fsWYBE0EDJbBPJMJF4zjjheXXHX3zUAvIckC5xDyS7A6wJndwxz7Kb4cUWIkldUgHf0nMnDIYfj0x9vmyS1UUGq9ICDcOebMW3EKdR8idIb1K4cdKlBeqJJP8ceNG1wGVd8AZJLuCo8n6HNqUiM8JOmwHYXgU586S32audoSPk8hx2O\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/auth/user-profile": {
+      "post": {
+        "description": "This request need bearer token authentication",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_10"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"userId\":\"5d6b5c3fea39a35d9a97e179\",\"name\":\"Ankit\",\"last_name\":\"P\",\"email\":\"ankit.phondani@delonixtravel.com\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/auth/otp-verify": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_11"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"otp\": 1234,\n\"userId\": \"5de91761b8bd591e76315097\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/couponCheck": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_12"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"code\": \"TEST1\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/password-forgot": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_13"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"mobile\":9999999999}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/password-update": {
+      "post": {
+        "description": "This request need bearer token authentication",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_9"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"mobile\":9999999999,\"password\":\"Delonix1#\",\"newPassword\":\"12345678\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "description": "Auto generated using Swagger Inspector",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_13"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\"refreshToken\":9999999999,\"userId\":\"5de91761b8bd591e76315097\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "description": "This request need bearer token authentication",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "apihotelssearch_area": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "apihotelsprebook_contactDetail": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "apihotelsprebook_search": {
+        "type": "object",
+        "properties": {
+          "check_out_date": {
+            "type": "string"
+          },
+          "child_count": {
+            "type": "integer"
+          },
+          "room_count": {
+            "type": "integer"
+          },
+          "source_market": {
+            "type": "string"
+          },
+          "hotel_id": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "adult_count": {
+            "type": "integer"
+          },
+          "check_in_date": {
+            "type": "string"
+          }
+        }
+      },
+      "apihotelsprebook_coupon": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer"
+          }
+        }
+      },
+      "body": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/apihotelstransactions_user"
+          }
+        }
+      },
+      "body_3": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/apihotelscancel_user"
+          },
+          "transactionId": {
+            "type": "string"
+          }
+        }
+      },
+      "body_4": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string"
+          },
+          "search": {
+            "$ref": "#/components/schemas/apihotelsprebook_search"
+          },
+          "bookingKey": {
+            "type": "string"
+          },
+          "hotelId": {
+            "type": "string"
+          }
+        }
+      },
+      "body_1": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string"
+          },
+          "booking_policy_id": {
+            "type": "string"
+          },
+          "search": {
+            "$ref": "#/components/schemas/apihotelsprebook_search"
+          },
+          "contactDetail": {
+            "$ref": "#/components/schemas/apihotelsprebook_contactDetail"
+          },
+          "coupon": {
+            "$ref": "#/components/schemas/apihotelsprebook_coupon"
+          },
+          "gstDetail": {
+            "$ref": "#/components/schemas/apihotelsprebook_gstDetail"
+          }
+        }
+      },
+      "body_2": {
+        "type": "object",
+        "properties": {
+          "checkoutdate": {
+            "type": "string"
+          },
+          "checkindate": {
+            "type": "string"
+          },
+          "transaction_identifier": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/apihotelspackages_details"
+            }
+          },
+          "hotelId": {
+            "type": "string"
+          }
+        }
+      },
+      "apihotelstransactions_user": {
+        "type": "object",
+        "properties": {
+          "updated_at": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "body_12": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "body_13": {
+        "type": "object",
+        "properties": {
+          "mobile": {
+            "type": "number"
+          }
+        }
+      },
+      "body_9": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "body_10": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "apihotelspackages_details": {
+        "type": "object",
+        "properties": {
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "child_count": {
+            "type": "string"
+          },
+          "room": {
+            "type": "string"
+          },
+          "adult_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "body_11": {
+        "type": "object",
+        "properties": {
+          "otp": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "body_7": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "password_reset_token": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "newpassword": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "apihotelsprebook_gstDetail": {
+        "type": "object",
+        "properties": {
+          "pincode": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "gstnumber": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "body_8": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "number"
+          }
+        }
+      },
+      "body_5": {
+        "type": "object",
+        "properties": {
+          "area": {
+            "$ref": "#/components/schemas/apihotelssearch_area"
+          },
+          "checkoutdate": {
+            "type": "string"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "checkindate": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/apihotelspackages_details"
+            }
+          },
+          "filters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "apihotelscancel_user": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "body_6": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "number"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://yourauthurl.com",
+            "scopes": {
+              "scope_name": "Private"
+            }
+          }
+        }
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

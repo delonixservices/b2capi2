@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3334:3334" # Map port 3334 on the container to port 3334 on the host
+    environment:
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - PROTOCOL=${PROTOCOL}
+      - APP_HOST=${APP_HOST}
+      - CLIENT_HOST=${CLIENT_HOST}
+      - CLIENT_PORT=${CLIENT_PORT}
+      - NODE_ENV=${NODE_ENV}
+      - JWT_SECRET=${JWT_SECRET}
+      - HOTEL_APIURL=${HOTEL_APIURL}
+      - HOTEL_APIAUTH=${HOTEL_APIAUTH}
+      - FLIGHT_APIURL=${FLIGHT_APIURL}
+      - SMS_AUTH_KEY=${SMS_AUTH_KEY}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+      - REDIS_AUTH=${REDIS_AUTH}
+      - MERCHANT_ID=${MERCHANT_ID}
+      - ACCESS_CODE=${ACCESS_CODE}
+      - WORKING_KEY=${WORKING_KEY}
+      - PAYMENT_URL=${PAYMENT_URL}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - redis
+      - mongo
+
+  mongo:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongo-data:
