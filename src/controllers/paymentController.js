@@ -100,6 +100,7 @@ exports.processPayment = async (req, res, next) => {
   const encRequest = ccavanue.encrypt(formDataString, workingKey);
 
   const formbody = '<form id="nonseamless" method="post" name="redirect" action="' + payment_url + '"/> <input type="hidden" id="encRequest" name="encRequest" value="' + encRequest + '"><input type="hidden" name="access_code" id="access_code" value="' + accessCode + '"><script language="javascript">document.redirect.submit();</script></form>';
+  console.log(formbody);
   res.send(formbody);
 };
 

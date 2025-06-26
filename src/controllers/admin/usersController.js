@@ -11,6 +11,11 @@ const {
   jwtSecret
 } = require('../../config/index');
 
+const {
+  getPaginationParams,
+  paginateQuery
+} = require('../../utils/pagination');
+
 // const randtoken = require('rand-token');
 
 exports.register = async (req, res, next) => {
@@ -145,20 +150,40 @@ exports.logout = async (req, res, next) => {
 // }
 
 exports.allUsers = async (req, res, next) => {
-  const users = await User.find({}, {
-    '_id': 1,
-    'name': 1,
-    'last_name': 1,
-    'email': 1,
-    'mobile': 1,
-    'created_at': 1,
-    'verified': 1
-  });
+  try {
+    // Get pagination parameters
+    const paginationParams = getPaginationParams(req, {
+      defaultLimit: 20,
+      maxLimit: 100
+    });
 
-  res.json({
-    "status": 200,
-    "data": users
-  });
+    // Get paginated users
+    const result = await paginateQuery(
+      User,
+      {}, // empty query to get all users
+      {
+        sort: { created_at: -1 },
+        select: {
+          '_id': 1,
+          'name': 1,
+          'last_name': 1,
+          'email': 1,
+          'mobile': 1,
+          'created_at': 1,
+          'verified': 1
+        }
+      },
+      paginationParams
+    );
+
+    res.json({
+      "status": 200,
+      "data": result.data,
+      "pagination": result.pagination
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.updateUser = async (req, res, next) => {

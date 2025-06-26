@@ -48,6 +48,21 @@ const {
 //   password: redisConfig.redisPassword,
 // });
 
+// Helper function to limit region IDs to maximum 50
+const limitRegionIds = (regionIds, maxCount = 50) => {
+  if (!regionIds || typeof regionIds !== 'string') {
+    return regionIds;
+  }
+  
+  const ids = regionIds.split(',');
+  if (ids.length <= maxCount) {
+    return regionIds;
+  }
+  
+  const limitedIds = ids.slice(0, maxCount).join(',');
+  console.log(`Region IDs limited from ${ids.length} to ${maxCount}: ${limitedIds.substring(0, 100)}...`);
+  return limitedIds;
+};
 
 exports.suggest = async (req, res, next) => {
   // console.log(req.query);
@@ -146,6 +161,8 @@ exports.suggest = async (req, res, next) => {
           data.data.city.results.map((item, _index) => {
             item.transaction_identifier = data.transaction_identifier;
             item.displayName = `${item.name} | (${item.hotelCount})`;
+            // Limit region IDs to maximum 50 to avoid Spring Boot backend issues
+            item.id = limitRegionIds(item.id, 50);
             responseData.push(item);
           })
         }
@@ -323,11 +340,14 @@ exports.searchHotels = async (req, res, next) => {
 
   // console.log(checkInDate, checkOutDate, total_adult, total_child, area.id, area.type, area.name);
 
+  // Limit region IDs to maximum 50 to avoid Spring Boot backend issues
+  const limitedAreaId = limitRegionIds(area.id, 50);
+
   const searchObj = {
     'search': {
       "source_market": "IN",
       "type": area.type,
-      "id": area.id,
+      "id": limitedAreaId,
       "name": area.name,
       "check_in_date": checkInDate,
       "check_out_date": checkOutDate,
@@ -351,7 +371,6 @@ exports.searchHotels = async (req, res, next) => {
     const client = redis.createClient();
 
     client.auth(redisAuth, function (err, reply) {
-      console.log(reply);
     });
 
     const util = require('util');
@@ -366,7 +385,6 @@ exports.searchHotels = async (req, res, next) => {
     // console.log(redisKey);
 
     try {
-      console.log(redisKey);
       cachedData = await client.get(`hotels_search:${redisKey}`);
 
     } catch (err) {
@@ -477,6 +495,16 @@ exports.searchHotels = async (req, res, next) => {
     // select only requested no of hotels in current iteration
     const selectedHotels = hotelsList.slice(lowerBound, upperBound);
 
+    // Filter out hotels with empty packages before processing
+    const hotelsWithPackages = selectedHotels.filter(hotel => 
+      hotel.rates && 
+      hotel.rates.packages && 
+      Array.isArray(hotel.rates.packages) && 
+      hotel.rates.packages.length > 0
+    );
+
+    console.log(`Filtered ${selectedHotels.length - hotelsWithPackages.length} hotels with empty packages`);
+
     // console.log(selectedHotels);
 
     let hotels;
@@ -485,21 +513,29 @@ exports.searchHotels = async (req, res, next) => {
 
     try {
       // hotels = await Hotel.insertMany(data.data.hotels);
-      hotels = await Hotel.insertMany(selectedHotels);
+      hotels = await Hotel.insertMany(hotelsWithPackages);
 
       const promiseArray = hotels.map(async (hotel) => {
         // console.log('total packages: ', hotel.rates.packages.length);
         hotel.hotelId = hotel._id;
         // delete hotel._id;
         // Add markup
+        
         const hotelPackage = hotel.rates.packages[0];
+
+        // Additional validation to ensure package exists
+        if (!hotelPackage) {
+          console.log(`Skipping hotel ${hotel.name} - no valid package found`);
+          return null;
+        }
 
         // console.log(hotelPackage);
         try {
           // addMarkup method will apply markup and other charges on hotelPackage
           await addMarkup(hotelPackage);
         } catch (err) {
-          throw err;
+          console.log(`Error applying markup to hotel ${hotel.name}:`, err);
+          return null;
         }
         if (hotelPackage.base_amount < minPrice) {
           minPrice = hotelPackage.base_amount;
@@ -512,11 +548,20 @@ exports.searchHotels = async (req, res, next) => {
       });
 
       const allHotels = await Promise.all(promiseArray);
+      // Filter out null values (hotels that failed processing)
+      const validHotels = allHotels.filter(hotel => hotel !== null);
+      
       // console.log(hotels)
       const filteredHotels = [];
-      console.log(allHotels);
+      console.log(validHotels);
       console.log(filters);
-      allHotels.forEach((hotel) => {
+      validHotels.forEach((hotel) => {
+        // Additional validation before accessing packages
+        if (!hotel.rates || !hotel.rates.packages || hotel.rates.packages.length === 0) {
+          console.log(`Skipping hotel ${hotel.name} - no packages available for filtering`);
+          return;
+        }
+
         // hotel filters
         if (filters.roomType && filters.roomType.length > 0) {
           let flag = false;
@@ -578,6 +623,18 @@ exports.searchHotels = async (req, res, next) => {
       });
     }
 
+    // Update pagination counts based on actual filtered hotels
+    const actualHotelsCount = hotels.length;
+    const actualCurrentHotelsCount = currentHotelsCount + actualHotelsCount;
+    
+    // Recalculate pagination for the actual number of hotels
+    const actualPaginaionObj = {
+      'currentHotelsCount': actualCurrentHotelsCount,
+      'totalHotelsCount': hotelsList.length, // Keep original total for pagination
+      'totalPages': Math.ceil(hotelsList.length / perPage),
+      'pollingStatus': paginaionObj.pollingStatus
+    };
+
     const dataObj = {
       'data': {
         'search': data.data.search,
@@ -587,12 +644,12 @@ exports.searchHotels = async (req, res, next) => {
           minPrice: Math.floor(minPrice),
           maxPrice: Math.ceil(maxPrice)
         },
-        'currentHotelsCount': paginaionObj.currentHotelsCount,
-        'totalHotelsCount': paginaionObj.totalHotelsCount,
+        'currentHotelsCount': actualPaginaionObj.currentHotelsCount,
+        'totalHotelsCount': actualPaginaionObj.totalHotelsCount,
         'page': page,
         'perPage': perPage,
-        'totalPages': paginaionObj.totalPages,
-        'status': paginaionObj.pollingStatus,
+        'totalPages': actualPaginaionObj.totalPages,
+        'status': actualPaginaionObj.pollingStatus,
         'transaction_identifier': data.transaction_identifier
       }
     }
@@ -692,6 +749,12 @@ exports.searchPackages = async (req, res, next) => {
     // making deep copy of an object
     let selectedHotel = JSON.parse(JSON.stringify(data.data.hotels[0]));
 
+    // Validate that the hotel has packages before processing
+    if (!selectedHotel.rates || !selectedHotel.rates.packages || !Array.isArray(selectedHotel.rates.packages) || selectedHotel.rates.packages.length === 0) {
+      console.log(`Error: Hotel ${selectedHotel.name} has no valid packages`);
+      return res.status(404).send("No packages available for this hotel");
+    }
+
     const promiseArray = selectedHotel.rates.packages.map(async (pkg) => {
       // console.log(pkg.booking_key);
       // console.log(pkg.chargeable_rate);
@@ -699,21 +762,24 @@ exports.searchPackages = async (req, res, next) => {
         // addMarkup method will apply markup and other charges on hotelPackage
         await addMarkup(pkg);
       } catch (err) {
-        return res.status(500).json({
-          'message': `${err}`
-        })
+        console.log(`Error applying markup to package:`, err);
+        return null; // Return null for failed packages instead of throwing error
       }
       return pkg;
     });
 
     const hotelPackages = await Promise.all(promiseArray);
 
-    // update hotel packages with updated rates
-    selectedHotel.rates.packages = hotelPackages;
-    // console.log(selectedHotel.rates.packages[0]);
-    // console.log(data.data.hotels[0].rates.packages)
-    // add hotel to the db
+    // Filter out null values (packages that failed processing)
+    const validPackages = hotelPackages.filter(pkg => pkg !== null);
 
+    if (validPackages.length === 0) {
+      console.log(`Error: No valid packages after markup processing for hotel ${selectedHotel.name}`);
+      return res.status(404).send("No valid packages available for this hotel");
+    }
+
+    // update hotel packages with updated rates
+    selectedHotel.rates.packages = validPackages;
 
     // add meta search reference in hotel if hotel request is coming through meta search sites like trivago
 
@@ -794,6 +860,18 @@ exports.bookingpolicy = async (req, res, next) => {
 
   try {
     hotel = await Hotel.findById(hotelId);
+    
+    // Validate that hotel exists and has packages
+    if (!hotel) {
+      logger.error("Hotel not found");
+      throw new Error("Hotel not found");
+    }
+    
+    if (!hotel.rates || !hotel.rates.packages || !Array.isArray(hotel.rates.packages) || hotel.rates.packages.length === 0) {
+      logger.error("Hotel has no valid packages");
+      throw new Error("Hotel has no valid packages");
+    }
+    
     let package = hotel.rates.packages.filter((package) => package.booking_key === bookingKey)[0];
 
     // console.log(transaction_id, search, package);

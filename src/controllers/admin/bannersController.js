@@ -3,6 +3,10 @@ const uuidv1 = require('uuid/v1');
 const fs = require('fs');
 const path = require('path');
 const logger = require('../../config/logger');
+const {
+  getPaginationParams,
+  paginateQuery
+} = require('../../utils/pagination');
 
 exports.addBanner = async (req, res, next) => {
   const id = req.body._id;
@@ -56,15 +60,35 @@ exports.addBanner = async (req, res, next) => {
 };
 
 exports.allBanners = async (req, res, next) => {
-  const banners = await Banner.find({}, {
-    'updated_at': 0,
-    __v: 0
-  });
+  try {
+    // Get pagination parameters
+    const paginationParams = getPaginationParams(req, {
+      defaultLimit: 20,
+      maxLimit: 100
+    });
 
-  res.json({
-    "status": 200,
-    "data": banners
-  });
+    // Get paginated banners
+    const result = await paginateQuery(
+      Banner,
+      {}, // empty query to get all banners
+      {
+        sort: { created_at: -1 },
+        select: {
+          'updated_at': 0,
+          __v: 0
+        }
+      },
+      paginationParams
+    );
+
+    res.json({
+      "status": 200,
+      "data": result.data,
+      "pagination": result.pagination
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.editBanner = async (req, res, next) => {

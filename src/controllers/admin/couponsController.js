@@ -1,5 +1,9 @@
 const Coupon = require('../../models/Coupon');
 const logger = require('../../config/logger');
+const {
+  getPaginationParams,
+  paginateQuery
+} = require('../../utils/pagination');
 
 exports.addCoupon = async (req, res, next) => {
 
@@ -47,11 +51,31 @@ exports.addCoupon = async (req, res, next) => {
 };
 
 exports.allCoupons = async (req, res, next) => {
-  const coupons = await Coupon.find({}).sort("-created_at");
-  res.json({
-    "status": 200,
-    "data": coupons
-  });
+  try {
+    // Get pagination parameters
+    const paginationParams = getPaginationParams(req, {
+      defaultLimit: 20,
+      maxLimit: 100
+    });
+
+    // Get paginated coupons
+    const result = await paginateQuery(
+      Coupon,
+      {}, // empty query to get all coupons
+      {
+        sort: { created_at: -1 }
+      },
+      paginationParams
+    );
+
+    res.json({
+      "status": 200,
+      "data": result.data,
+      "pagination": result.pagination
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.editCoupon = async (req, res, next) => {

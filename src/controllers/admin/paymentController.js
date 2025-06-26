@@ -26,6 +26,11 @@ const Payment = require('../../models/Payment');
 
 const url = require('url');
 
+const {
+  getPaginationParams,
+  paginateQuery
+} = require('../../utils/pagination');
+
 // const invoice = require('../../utils/invoice');
 // const voucher = require('../../utils/voucher');
 
@@ -244,17 +249,34 @@ exports.paymentResponseHandler = async (req, res, next) => {
 };
 
 exports.allPayments = async (req, res, next) => {
-  const payments = await Payment.find({
-    // status: 1
+  try {
+    // Get pagination parameters
+    const paginationParams = getPaginationParams(req, {
+      defaultLimit: 20,
+      maxLimit: 100
+    });
 
-    // updated payment success code from 1 to 4
-    status: 4
-  }).sort("-created_at");
+    // Get paginated payments
+    const result = await paginateQuery(
+      Payment,
+      {
+        // updated payment success code from 1 to 4
+        status: 4
+      },
+      {
+        sort: { created_at: -1 }
+      },
+      paginationParams
+    );
 
-  res.json({
-    "status": 200,
-    "data": payments
-  });
+    res.json({
+      "status": 200,
+      "data": result.data,
+      "pagination": result.pagination
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 exports.paymentStatus = async (req, res, next) => {
